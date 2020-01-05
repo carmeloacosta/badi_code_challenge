@@ -1,3 +1,8 @@
+#!/bin/python3
+
+"""
+    Badi App config
+"""
 
 from django.apps import AppConfig
 

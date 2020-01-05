@@ -1,3 +1,6 @@
+#!/bin/python3
+
+
 import os
 from json import dumps
 from django.test import TestCase

@@ -1,3 +1,6 @@
+#!/bin/python3
+
+
 """badi URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
