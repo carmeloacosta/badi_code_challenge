@@ -12,3 +12,5 @@ DEFAULT_CITY_VALUES = {
         "sunset": "17:25"
     }
 }
+
+FLOOR_HEIGHT = 1  # Measured in the same unit than the distance between buildings
