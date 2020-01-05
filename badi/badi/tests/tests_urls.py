@@ -1,4 +1,5 @@
 import os
+from json import dumps
 from django.test import TestCase
 
 from ..settings import FIXTURE_DIRS
@@ -11,8 +12,12 @@ class InitViewTestCase(TestCase):
     def setUp(self):
         pass
 
-    def test__init__ok(self):
-        response = self.client.get("/init")
+    def test__empty_init__ok(self):
+        body = []
+
+        response = self.client.post('/init',
+                                    dumps(body),
+                                    content_type="application/json")
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content.decode(), "Barcelona city updated")
