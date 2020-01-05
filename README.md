@@ -1,1 +1,2 @@
-# badi_code_challenge
+# Test exercise for Badi by Carmelo Acosta 
+
