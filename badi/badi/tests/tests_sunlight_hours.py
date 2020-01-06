@@ -70,10 +70,10 @@ class SunlightHoursTestCase(TestCase):
         #            (<expected_max_west_shadow_index_floor_N>, <expected_max_west_shadow_distance_floor_N>))
         #           ]
         values = [
-            (0, [(1, 1), (1, 1), (1, 1), (1, 1), (2, 3), (2, 3), (2, 3), (-1, -1)]),
+            (0, [(1, 1), (1, 1), (1, 1), (1, 1), (2, 3), (2, 3), (2, 3), (-1, 0)]),
             (1, [(2, 2), (2, 2), (2, 2), (2, 2)]),
-            (2, [(3, 1), (-1, -1), (-1, -1), (-1, -1), (-1, -1), (-1, -1), (-1, -1)]),
-            (3, [(-1, -1)]),
+            (2, [(3, 1), (-1, 0), (-1, 0), (-1, 0), (-1, 0), (-1, 0), (-1, 0)]),
+            (3, [(-1, 0)]),
         ]
 
         # Test main
@@ -104,20 +104,23 @@ class SunlightHoursTestCase(TestCase):
         # Check results
         expected_building_list = [
             {"name": "Aticco", "apartments_count": 8, "distance": 1,
-             "dawn": [],
-             "sunset": []
+             "dawn": ['08:14', '08:14', '08:14', '08:14', '08:14', '08:14', '08:14', '08:14'],
+             "sunset": ['13:33', '13:46', '14:11', '15:08', '15:08', '15:42', '16:29', '17:25']
              },
+
             {"name": "01", "apartments_count": 4, "distance": 2,
-             "dawn": [],
-             "sunset": []
+             "dawn": ['12:27', '12:24', '12:20', '12:14'],
+             "sunset": ['13:39', '13:46', '13:57', '14:11']
              },
+
             {"name": "CEM", "apartments_count": 7, "distance": 1,
-             "dawn": [],
-             "sunset": []
+             "dawn": ['12:27', '12:24', '12:20', '12:14', '12:06', '11:53', '11:28'],
+             "sunset": ['15:08', '17:25', '17:25', '17:25', '17:25', '17:25', '17:25']
              },
+
             {"name": "30", "apartments_count": 1, "distance": -1,
-             "dawn": [],
-             "sunset": []
+             "dawn": ['12:27'],
+             "sunset": ['17:25']
              }
         ]
 

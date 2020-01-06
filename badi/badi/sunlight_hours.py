@@ -192,9 +192,9 @@ def get_max_west_shadow_details(index, building_list, floor):
                 max_west_shadow_distance = acc_west_distance
 
     if max_west_shadow_index == -1 and max_west_shadow_distance == 0:
-        # Mark "no distance" or "infinite distance" as -1
+        # Mark "no distance" or "infinite distance" as index -1
         max_west_shadow_index = -1
-        max_west_shadow_distance = -1
+        max_west_shadow_distance = 0
 
     return max_west_shadow_index, max_west_shadow_distance
 
@@ -267,7 +267,6 @@ def get_neighbourhood_sunlight_hours(building_list, city_dawn, city_sunset):
                 angle = 0
 
             dawn.append(get_apartment_dawn(angle, city_seconds_per_grade, city_dawn))
-            print("\nEAST ANGLE: {}, FLOOR: {}, DAWN: {}".format(angle, floor, dawn[-1]))  # DEBUGGING
 
             #
             # WEST SIDE
@@ -286,10 +285,7 @@ def get_neighbourhood_sunlight_hours(building_list, city_dawn, city_sunset):
                 angle = 0
 
             sunset.append(get_apartment_sunset(angle, city_seconds_per_grade, city_sunset))
-            print("\nWEST ANGLE: {},  max_west_shadow_index: {}, max_west_shadow_distance: {}, FLOOR: {}, SUNSET: {}".format(angle, max_west_shadow_index, max_west_shadow_distance, floor, sunset[-1]))  # DEBUGGING
-            print("\n-------------------------------------------------------------------------") #DEBUGGING
 
-        import ipdb; ipdb.set_trace()  # DEBUGGING
         # Update building info
         building["dawn"] = dawn
         building["sunset"] = sunset
