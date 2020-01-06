@@ -1,4 +1,4 @@
-FROM alpine:3.9
+FROM frolvlad/alpine-python3
 
 #
 # COPY ALL FILES TO THE /app CONTAINER'S DESTINATION FOLDER

@@ -28,7 +28,7 @@ FIXTURE_DIRS = (os.path.join(os.path.join(BASE_DIR, 'badi'), 'fixtures'),)
 SECRET_KEY = '+-4_bn^x%gmq^bh2lrz#^=rk7#cs7=($2%wxibhe8=-@o7n0st'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
