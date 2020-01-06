@@ -59,7 +59,7 @@ class Controller():
 
             nqs = Neighbourhood.objects.filter(city=cqs[0]).filter(name=apartment_info["neighbourhood"])
             bqs = Building.objects.filter(name=apartment_info["building"]).filter(neighbourhood=nqs[0])
-            aqs = Apartment.objects.filter(building=bqs[0]).filter(floor=apartment_info["floor"])
+            aqs = Apartment.objects.filter(building=bqs[0]).filter(floor=apartment_info["apartment"])
 
             return aqs[0]
 
@@ -76,37 +76,46 @@ class Controller():
         :param city_info: (list of dict) The city info to be saved. Follows the format specified in the Code Challenge.
         :return: (bool) True if successfully saved; False otherwise.
         """
+        #
         # USE DEFAULT CITY
-        city = City(name=DEFAULT_CITY, dawn=DEFAULT_CITY_VALUES[DEFAULT_CITY]["dawn"],
+        #
+
+        # Delete prior city content if exists
+        cqs = City.objects.filter(name=DEFAULT_CITY)
+        if cqs:
+            nqs = Neighbourhood.objects.filter(city=DEFAULT_CITY)
+            for neighbourhood in nqs:
+                neighbourhood.delete()
+
+        #
+        # Now update the city with the new content
+        #
+        city = City.objects.create(name=DEFAULT_CITY, dawn=DEFAULT_CITY_VALUES[DEFAULT_CITY]["dawn"],
                     sunset=DEFAULT_CITY_VALUES[DEFAULT_CITY]["sunset"])
-        city.save()
 
         for neighbourhood_info in city_info:
-            neighbourhood = Neighbourhood(name=neighbourhood_info["neighborhood"],
+            neighbourhood = Neighbourhood.objects.create(name=neighbourhood_info["neighborhood"],
                                           apartments_height=neighbourhood_info["apartments_height"], city=city)
+
+            # Force save (recall that Django is Lazy)
+            neighbourhood = Neighbourhood.objects.filter(name=neighbourhood_info["neighborhood"]).filter(city=city)[0]
             acc_building_east_distance = 0
 
             for b_index, building_info in enumerate(neighbourhood_info["buildings"]):
-                building = Building(name=building_info["name"], floors=building_info["apartments_count"],
+                building = Building.objects.create(name=building_info["name"], floors=building_info["apartments_count"],
                                     neighbourhood=neighbourhood, east_position=b_index,
                                     prev_distance=acc_building_east_distance,
                                     next_distance=building_info["distance"])
 
-                try:
-                    building.save()
-                except ValueError:
-                    neighbourhood.save()
-
+                # Force save (recall that Django is Lazy)
+                building = Building.objects.filter(neighbourhood=neighbourhood).filter(name=building_info["name"])[0]
                 acc_building_east_distance += building_info["distance"]
 
                 for floor in range(building_info["apartments_count"]):
-                    apartment = Apartment(building=building, floor=floor, dawn=building_info["dawn"][floor],
-                                          sunset=building_info["sunset"][floor])
+                    apartment = Apartment.objects.create(building=building, floor=floor,
+                                                         dawn=building_info["dawn"][floor],
+                                                         sunset=building_info["sunset"][floor])
 
-                    try:
-                        apartment.save()
-                    except ValueError:
-                        neighbourhood.save()
 
 
 
