@@ -26,6 +26,8 @@ from .views.default import handler404, handler500
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('init', InitView.as_view()),
+    path('sunlight_hours', SunlightHoursView.as_view()),
+    path('get_sunlight_hours', SunlightHoursView.as_view()),
     path('getSunlightHours', SunlightHoursView.as_view()),
 
 ]

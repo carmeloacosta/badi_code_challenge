@@ -29,7 +29,6 @@ class InitView(View):
             body = json.loads(request.body)
 
             try:
-                # TODO: Verify the JSON contains a valid city description
                 new_city = City(body)
                 new_city.save()
                 message = "{} city updated".format(new_city.name)

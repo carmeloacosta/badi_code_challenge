@@ -38,7 +38,8 @@ class City():
         self.info = city_info
 
         # Update City info, including per apartment sunlight hours info
-        compute_city_sunlight_hours(self.info, dawn, sunset)
+        if not compute_city_sunlight_hours(self.info, dawn, sunset):
+            raise CityInitializationError()
 
     def save(self):
         """
