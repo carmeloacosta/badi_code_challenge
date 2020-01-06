@@ -92,6 +92,7 @@ class SunlightHoursTestCase(TestCase):
                 self.assertEqual(max_west_shadow_distance, value[1][floor][1])
 
     def test__get_neighbourhood_sunlight_hours__ok(self):
+        apartments_height = 1
         building_list = [{"name": "Aticco", "apartments_count": 8, "distance": 1},
                          {"name": "01", "apartments_count": 4, "distance": 2},
                          {"name": "CEM", "apartments_count": 7, "distance": 1},
@@ -99,7 +100,7 @@ class SunlightHoursTestCase(TestCase):
 
         # Test main
         get_neighbourhood_sunlight_hours(building_list, DEFAULT_CITY_VALUES[DEFAULT_CITY]["dawn"],
-                                         DEFAULT_CITY_VALUES[DEFAULT_CITY]["sunset"])
+                                         DEFAULT_CITY_VALUES[DEFAULT_CITY]["sunset"], apartments_height)
 
         # Check results
         expected_building_list = [

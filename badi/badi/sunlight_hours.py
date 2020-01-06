@@ -4,9 +4,7 @@
     Module that gathers tools to compute sunlight hours.
 """
 
-from math import atan, atan2, degrees
-
-from .constants import FLOOR_HEIGHT
+from math import atan, degrees
 
 
 def get_apartment_dawn(angle, city_seconds_per_grade, city_dawn):
@@ -199,7 +197,7 @@ def get_max_west_shadow_details(index, building_list, floor):
     return max_west_shadow_index, max_west_shadow_distance
 
 
-def get_neighbourhood_sunlight_hours(building_list, city_dawn, city_sunset):
+def get_neighbourhood_sunlight_hours(building_list, city_dawn, city_sunset, apartment_height):
     """
         Adds per apartment dawn and sunset info to the specified neighbourhood. That is, for each building in the
         neighbourhood two new lists will be added, dawn and sunset, that specify the time when the sunlight starts and
@@ -228,6 +226,7 @@ def get_neighbourhood_sunlight_hours(building_list, city_dawn, city_sunset):
                 Examples: '08:14', '17:25'
 
     :param city_sunset: (str) The local time when ends the sunlight in the city. Follows the same format as city_dawn.
+    :param apartment_height: (int) The height of the apartments.
     :return: None
     """
     # Compute the number of elapsed seconds for each grade of the sunlight, assuming (as said in the Code Challenge)
@@ -260,7 +259,7 @@ def get_neighbourhood_sunlight_hours(building_list, city_dawn, city_sunset):
             # other obstacles.
             try:
                 angle = degrees(atan(((float(building_list[max_east_shadow_index]["apartments_count"]) -
-                                      float(floor))*FLOOR_HEIGHT)/float(max_east_shadow_distance)))
+                                      float(floor))*apartment_height)/float(max_east_shadow_distance)))
 
             except (ZeroDivisionError, IndexError):
                 # The first building has no obstacles on the east
@@ -278,7 +277,7 @@ def get_neighbourhood_sunlight_hours(building_list, city_dawn, city_sunset):
             # other obstacles.
             try:
                 angle = degrees(atan(((float(building_list[max_west_shadow_index]["apartments_count"]) -
-                                      float(floor))*FLOOR_HEIGHT)/float(max_west_shadow_distance)))
+                                      float(floor))*apartment_height)/float(max_west_shadow_distance)))
 
             except (ZeroDivisionError, IndexError):
                 # The last building has no obstacles on the west
