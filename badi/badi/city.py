@@ -5,6 +5,7 @@
 """
 
 from .constants import DEFAULT_CITY, DEFAULT_CITY_VALUES
+from .sunlight_hours import compute_city_sunlight_hours
 
 
 class CityInitializationError(Exception):
@@ -33,8 +34,11 @@ class City():
         self.dawn = dawn
         # Sunset time. Local time at which ends the sunlight
         self.sunset = sunset
+        # City info, including per apartment sunlight hours info
+        self.info = city_info
 
-        # TODO. Initialize the whole city from city_info. Raises a CityInitializationError if something went wrong.
+        # Update City info, including per apartment sunlight hours info
+        compute_city_sunlight_hours(self.info, dawn, sunset)
 
     def save(self):
         """

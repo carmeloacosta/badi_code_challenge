@@ -301,4 +301,69 @@ def get_neighbourhood_sunlight_hours(building_list, city_dawn, city_sunset, apar
             max_east_shadow_distance = acc_east_distance
 
 
+def compute_city_sunlight_hours(city_info, city_dawn, city_sunset):
+    """
+        Given the info of a city updates this info computing, for each apartment, both the dawn and sunset hour. That
+        is, it is computed both the time the sunlight starts and the time the sunlight ends for each apartment of the
+        city.
 
+        [{ neighborhood: <name_string>, apartments_height: <number>, buildings: [{name:
+        <name_string>, apartments_count: <number>, distance: <number>}]}]
+
+    :param city_info: (list of dicts) City info (as described in the Code Challenge). Therefore, the expected format
+        is as follows:
+
+        [
+            { neighborhood: <name_string>, apartments_height: <number>,
+              buildings: [{name:<name_string>, apartments_count: <number>, distance: <number>}]
+            }
+        ]
+
+        IMPORTANT: THIS IS AN INPUT/OUTPUT PARAMETER
+            The city_info must be modified to add, for each building, two new lists, dawn and sunset, that specify the
+            apartment dawn time and sunset time for each floor (sorted from 0 to N-1 floor).
+
+            The resulting format is as follows:
+
+        [
+            { neighborhood: <name_string>, apartments_height: <number>,
+              buildings: [{name:<name_string>, apartments_count: <number>, distance: <number>,
+                          dawn: [<floor_0_dawn>, <floor_1_dawn> ... <floor_N-1_dawn>],
+                          sunset: [<floor_0_sunset>, <floor_1_sunset> ... <floor_N-1_sunset>]
+                          }]
+            }
+        ]
+
+            with:
+                    <floor_N_dawn> and <floor_N_sunset> following the format
+
+                                                        HH:MM
+                            with
+                                    HH: Hour   (from '00' to '23')
+                                    MM: Minute (from '00' to '59')
+
+                            Examples: '08:14', '17:25'
+
+    :param city_dawn: (str) The local time when starts the sunlight in the city. Follows the format:
+
+                                            HH:MM
+                with
+                        HH: Hour   (from '00' to '23')
+                        MM: Minute (from '00' to '59')
+
+                Examples: '08:14', '17:25'
+
+    :param city_sunset: (str) The local time when ends the sunlight in the city. Follows the same format as city_dawn.
+    :return: (bool) True is successfully computed; False otherwise.
+    """
+    result = True
+
+    try:
+        for neighbourhood in city_info:
+            get_neighbourhood_sunlight_hours(neighbourhood["buildings"], city_dawn, city_sunset,
+                                             neighbourhood["apartments_height"])
+
+    except (TypeError, KeyError):
+        result = False
+
+    return result
