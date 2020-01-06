@@ -90,6 +90,8 @@ class Controller():
         :param city_info: (list of dict) The city info to be saved. Follows the format specified in the Code Challenge.
         :return: (bool) True if successfully saved; False otherwise.
         """
+        result = True
+
         #
         # USE DEFAULT CITY
         #
@@ -130,6 +132,7 @@ class Controller():
                                                          dawn=building_info["dawn"][floor],
                                                          sunset=building_info["sunset"][floor])
 
+        return result
 
 
 
