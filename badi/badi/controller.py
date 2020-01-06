@@ -77,29 +77,36 @@ class Controller():
         :return: (bool) True if successfully saved; False otherwise.
         """
         # USE DEFAULT CITY
-        city = City(name=DEFAULT_CITY, dawn=DEFAULT_CITY_VALUES["dawn"], sunset=DEFAULT_CITY_VALUES["sunset"])
+        city = City(name=DEFAULT_CITY, dawn=DEFAULT_CITY_VALUES[DEFAULT_CITY]["dawn"],
+                    sunset=DEFAULT_CITY_VALUES[DEFAULT_CITY]["sunset"])
         city.save()
 
         for neighbourhood_info in city_info:
             neighbourhood = Neighbourhood(name=neighbourhood_info["neighborhood"],
-                                          apartments_height=neighbourhood_info["neighborhood"], city=city)
-            neighbourhood.save()
-
+                                          apartments_height=neighbourhood_info["apartments_height"], city=city)
             acc_building_east_distance = 0
 
             for b_index, building_info in enumerate(neighbourhood_info["buildings"]):
                 building = Building(name=building_info["name"], floors=building_info["apartments_count"],
                                     neighbourhood=neighbourhood, east_position=b_index,
-                                    prev_distance= acc_building_east_distance,
-                                    next_distance=neighbourhood_info["distance"])
+                                    prev_distance=acc_building_east_distance,
+                                    next_distance=building_info["distance"])
 
-                acc_building_east_distance += neighbourhood_info["distance"]
+                try:
+                    building.save()
+                except ValueError:
+                    neighbourhood.save()
+
+                acc_building_east_distance += building_info["distance"]
 
                 for floor in range(building_info["apartments_count"]):
                     apartment = Apartment(building=building, floor=floor, dawn=building_info["dawn"][floor],
                                           sunset=building_info["sunset"][floor])
 
-                    apartment.save()
+                    try:
+                        apartment.save()
+                    except ValueError:
+                        neighbourhood.save()
 
 
 
