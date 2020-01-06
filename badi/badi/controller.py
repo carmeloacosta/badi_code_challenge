@@ -47,8 +47,22 @@ class Controller():
         """
             Retrieves the information of the specified apartment.
 
-        :param apartment_info: (dict)
-        :return:
+        :param apartment_info: (dict) Requested apartment details. Follows the format:
+
+                {
+                    ["city": <city>]
+                    "neighbourhood": <neighbourhood_name>,
+                    "building": <building_name>,
+                    "apartment": <apartment>
+                }
+
+                with:
+                    <city>: (str) City name. (if not present, use default city)
+                    <neighbourhood_name>: (str) Neighbourhood name.
+                    <building_name>: (str) Building name.
+                    <apartment> (int) Apartment floor. Assumption: There is only 1 apartment per floor.
+
+        :return: (.models.Apartment) Information of the apartment.
         """
         try:
             try:

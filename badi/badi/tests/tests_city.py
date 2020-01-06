@@ -2,11 +2,13 @@
 
 
 import os
+from json import dumps
 from django.test import TestCase
 
 from ..settings import FIXTURE_DIRS
 from ..city import City
 from ..constants import DEFAULT_CITY, DEFAULT_CITY_VALUES
+from ..controller import Controller
 
 
 class CityTestCase(TestCase):
@@ -141,7 +143,7 @@ class CityTestCase(TestCase):
         #     }
         # ]
         expected_city_info = [
-            {"neighborhood": "POBLENOU", "apartments_height": 1, "buildings":
+            {"neighbourhood": "POBLENOU", "apartments_height": 1, "buildings":
                 [{"name": "Aticco", "apartments_count": 8, "distance": 1,
                   "dawn": ["08:14", "08:14", "08:14", "08:14", "08:14", "08:14", "08:14", "08:14"],
                   "sunset": ["13:33", "13:46", "14:11", "15:08", "15:08", "15:42", "16:29", "17:25"]
@@ -160,7 +162,7 @@ class CityTestCase(TestCase):
                   }
                  ]
              },
-            {"neighborhood": "RAVAL", "apartments_height": 2, "buildings":
+            {"neighbourhood": "RAVAL", "apartments_height": 2, "buildings":
                 [{"name": "Santa Monica", "apartments_count": 3, "distance": 1,
                   "dawn": ["08:14", "08:14", "08:14"],
                   "sunset": ["13:33", "14:11", "14:11"]
@@ -177,4 +179,20 @@ class CityTestCase(TestCase):
              }
         ]
 
-        #TODO: Check that all this info has been saved to DataBase
+        for neighbourhood in expected_city_info:
+            for building in neighbourhood["buildings"]:
+                for floor in range(building["apartments_count"]):
+
+                    apartment_info = {
+                        "neighbourhood": neighbourhood["neighbourhood"],
+                        "building": building["name"],
+                        "apartment": floor
+                    }
+
+                    apartment = Controller.get_apartment_info(apartment_info)
+
+                    self.assertEqual(apartment.building.neighbourhood.name, neighbourhood["neighbourhood"])
+                    self.assertEqual(apartment.building.name, building["name"])
+                    self.assertEqual(apartment.floor, floor)
+
+

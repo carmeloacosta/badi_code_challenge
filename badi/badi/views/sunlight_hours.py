@@ -59,6 +59,34 @@ class SunlightHoursView(View):
 
         return result, message
 
+    @staticmethod
+    def get_sunlight_hours_str(apartment):
+        """
+            Returns the sunlight hours, as specified in the Code Challenge.
+
+        :param apartment: (..models.Apartment) The information of the apartment to show sunlight hours string.
+        :return: (str): The sunlight hours, following the format (the one specified in the Code Challenge):
+
+                                <apartment_dawn> - <apartment_sunset>
+
+                with
+                        <apartment_dawn> : (str) The local time when starts the sunlight in the apartment. Follows the
+                                            format:
+
+                                                    HH:MM
+
+                                    with
+                                            HH: Hour   (from '00' to '23')
+                                            MM: Minute (from '00' to '59')
+
+                                    Examples: '08:14', '17:25'
+
+                        <apartment_sunset> : (str) The local time when ends the sunlight in the apartment. Follows the
+                                            same format as apartment_dawn.
+
+        """
+        return "{} - {}".format(apartment.dawn, apartment.sunset)
+
     def put(self, request):
         """
             Gets the number of sunlight hours of the specified apartment.
@@ -81,8 +109,7 @@ class SunlightHoursView(View):
                     # The apartment does not exists
                     return HttpResponseNotFound("Unknown apartment.")
                 else:
-                    # TODO: move get_sunlight_hours_str to this class. It has more sense as a view related function
-                    return HttpResponse(apartment.get_sunlight_hours_str())
+                    return HttpResponse(self.get_sunlight_hours_str(apartment))
         else:
             # Bad parameters
             return HttpResponseBadRequest(message)
