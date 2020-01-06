@@ -28,9 +28,8 @@ class Controller():
             aqs = Apartment.objects.filter(id=1)
             bqs = Building.objects.filter(id=1)
             nqs = Neighbourhood.objects.filter(id=1)
-            cqs = City.objects.filter(id=1)
 
-            if len(aqs) > 1 or len(bqs) > 1 or len(nqs) > 1 or len(cqs) > 1:
+            if len(aqs) > 1 or len(bqs) > 1 or len(nqs) > 1:
                 # Force real execution of lazy querysets (and enforce data consistency)
                 logger.exception("Data inconsistency detected - The DB is in an uncertain state. Check it out")
                 raise Exception("Inconsistent Data")
@@ -64,7 +63,7 @@ class Controller():
 
             return aqs[0]
 
-        except KeyError:
+        except (IndexError, KeyError):
             result = None
 
         return result
