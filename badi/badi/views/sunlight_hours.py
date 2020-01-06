@@ -3,6 +3,7 @@ import json
 from django.views import View
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
 
+from ..controller import Controller
 
 # For the sake of simplicity, in this test I will deactivate the CSRF protection for this test. In real production
 # Cross Site Request Forgery Protection should be used.
@@ -69,14 +70,19 @@ class SunlightHoursView(View):
         request_info, message = SunlightHoursView.check_valid_body(request.body.decode())
 
         if request_info:
-            #TODO CHECK that the apartment exists
-            apartment = None  # DEBUGGING Apartment(request_info)
-
-            if apartment is None:
-                # The apartment does not exists
-                return HttpResponseNotFound("Unknown apartment")
+            if not Controller.is_running_db():
+                message = "Service Unavailable."
+                status = 503  # SERVICE UNAVAILABLE
+                return HttpResponse(message, status=status)
             else:
-                return HttpResponse(apartment.get_sunlight_hours_str())
+                apartment = Controller.get_apartment_info(request_info)
+
+                if apartment is None:
+                    # The apartment does not exists
+                    return HttpResponseNotFound("Unknown apartment.")
+                else:
+                    # TODO: move get_sunlight_hours_str to this class. It has more sense as a view related function
+                    return HttpResponse(apartment.get_sunlight_hours_str())
         else:
             # Bad parameters
             return HttpResponseBadRequest(message)
