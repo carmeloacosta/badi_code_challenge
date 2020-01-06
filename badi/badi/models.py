@@ -32,12 +32,15 @@ class Neighbourhood(models.Model):
     id = models.IntegerField(primary_key=True)
     # Neighbourhood name
     name = models.CharField(max_length=128)
+    # The height of the apartments in this neighbourhood
+    apartments_height = models.IntegerField()
     # The city in which is located this neighbourhood
     city = models.ForeignKey(City, on_delete=models.CASCADE)
 
     def __str__(self):
 
-        return "< id={}, name={}, city={} >".format(self.id, self.name, self.city.name)
+        return "< id={}, name={}, apartments_height={}, city={} >".format(self.id, self.name, self.apartments_height,
+                                                                          self.city.name)
 
 
 class Building(models.Model):

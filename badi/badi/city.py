@@ -6,6 +6,7 @@
 
 from .constants import DEFAULT_CITY, DEFAULT_CITY_VALUES
 from .sunlight_hours import compute_city_sunlight_hours
+from .controller import Controller
 
 
 class CityInitializationError(Exception):
@@ -45,7 +46,6 @@ class City():
         """
             Save city description to permanent storage.
 
-        :return: None
+        :return: (bool) True if successfully saved; False otherwise.
         """
-        #TODO
-        pass
+        return Controller.save_city(self.info)

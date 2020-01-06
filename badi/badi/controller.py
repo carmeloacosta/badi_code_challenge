@@ -3,7 +3,7 @@
 import logging
 logger = logging.getLogger(__name__) #TODO: Replace logger with Dependency Injected global logger
 
-from .constants import DEFAULT_CITY
+from .constants import DEFAULT_CITY, DEFAULT_CITY_VALUES
 from .models import Apartment, Building, Neighbourhood, City
 
 
@@ -67,4 +67,39 @@ class Controller():
             result = None
 
         return result
+
+    @staticmethod
+    def save_city(city_info):
+        """
+            Saves the whole city to database. If the city already exists in the database it is updated.
+
+        :param city_info: (list of dict) The city info to be saved. Follows the format specified in the Code Challenge.
+        :return: (bool) True if successfully saved; False otherwise.
+        """
+        # USE DEFAULT CITY
+        city = City(name=DEFAULT_CITY, dawn=DEFAULT_CITY_VALUES["dawn"], sunset=DEFAULT_CITY_VALUES["sunset"])
+        city.save()
+
+        for neighbourhood_info in city_info:
+            neighbourhood = Neighbourhood(name=neighbourhood_info["neighborhood"],
+                                          apartments_height=neighbourhood_info["neighborhood"], city=city)
+            neighbourhood.save()
+
+            acc_building_east_distance = 0
+
+            for b_index, building_info in enumerate(neighbourhood_info["buildings"]):
+                building = Building(name=building_info["name"], floors=building_info["apartments_count"],
+                                    neighbourhood=neighbourhood, east_position=b_index,
+                                    prev_distance= acc_building_east_distance,
+                                    next_distance=neighbourhood_info["distance"])
+
+                acc_building_east_distance += neighbourhood_info["distance"]
+
+                for floor in range(building_info["apartments_count"]):
+                    apartment = Apartment(building=building, floor=floor, dawn=building_info["dawn"][floor],
+                                          sunset=building_info["sunset"][floor])
+
+                    apartment.save()
+
+
 
