@@ -4,9 +4,14 @@
     City module. Contains all information regarding with a full city
 """
 
+from logging import getLogger
+
 from .constants import DEFAULT_CITY, DEFAULT_CITY_VALUES
 from .sunlight_hours import compute_city_sunlight_hours
 from .controller import Controller
+
+# Get an instance of a logger
+logger = getLogger(__name__)
 
 
 class CityInitializationError(Exception):
@@ -19,7 +24,7 @@ class City():
     """
 
     def __init__(self, city_info, name=DEFAULT_CITY, dawn=DEFAULT_CITY_VALUES[DEFAULT_CITY]["dawn"],
-                 sunset=DEFAULT_CITY_VALUES[DEFAULT_CITY]["sunset"]):
+                 sunset=DEFAULT_CITY_VALUES[DEFAULT_CITY]["sunset"], logger=logger):
         """
             Initializes the city with the specified info.
 
@@ -37,10 +42,14 @@ class City():
         self.sunset = sunset
         # City info, including per apartment sunlight hours info
         self.info = city_info
+        # Logger
+        self.logger = logger
 
         # Update City info, including per apartment sunlight hours info
         if not compute_city_sunlight_hours(self.info, dawn, sunset):
             raise CityInitializationError()
+
+        logger.debug("{} city created.".format(self.name))
 
     def save(self):
         """
@@ -48,4 +57,12 @@ class City():
 
         :return: (bool) True if successfully saved; False otherwise.
         """
-        return Controller.save_city(self.info)
+        result = Controller.save_city(self.info)
+
+        if result:
+            self.logger.info("{} city updated".format(self.name))
+        else:
+            self.logger.error("Impossible to update city {}".format(self.name))
+
+        return result
+

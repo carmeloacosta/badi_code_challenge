@@ -127,6 +127,27 @@ USE_L10N = True
 USE_TZ = True
 
 
+# FOR THE SAKE OF SIMPLICITY, IN THIS CODE CHALLENGE I WILL DUMP ALL LOGS TO A SINGLE FILE IN THE LOCAL FOLDER. IN A
+# PRODUCTION DEPLOYMENT USE A MORE CONVENIENT LAYOUT.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
